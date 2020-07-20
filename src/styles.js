@@ -34,7 +34,10 @@ export const LineContent = styled.span`
 `;
 
 export const Header = styled.div`
+  position: fixed;
   text-align: left;
+  width: "100%";
+  padding: 2em;
 `;
 
 export const Footer = styled.div`
@@ -48,14 +51,17 @@ export const Footer = styled.div`
 `;
 
 export const Code = styled.div`
+  text-align: left;
+  font-family: "Source Sans Pro", "Source Code Pro", monospace;
+  font-size: 18;
   width: "100%"  
   height: "50%"
   padding: 2em;
 `;
 
 export const Chart = styled.div`
-  width: "100%"
-  height: "50%"
+  width: "100%";
+  height: "50%";
   background: #666;
   padding: 2em;
 `;

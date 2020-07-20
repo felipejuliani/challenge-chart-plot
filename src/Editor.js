@@ -1,14 +1,19 @@
-import React, { Fragment, Component } from 'react'
+import React, {  Component } from 'react'
+import {Footer, Header } from "./styles";
 
-import {Pre, Line, LineNo, LineContent, Footer, Header, Wrapper, Chart, Code } from "./styles";
-import Editor from 'react-simple-code-editor'
-import Highlight, { defaultProps } from 'prism-react-renderer'
-import theme from 'prism-react-renderer/themes/nightOwl'
+import AceEditor from 'react-ace';
+
+import "ace-builds/src-noconflict/mode-javascript";
+import "ace-builds/src-noconflict/theme-monokai";
+
+import SplitPane from 'react-split-pane';
+import './assets/split-pane.css';
 
 import CanvasJSReact from './assets/canvasjs.react';
-//var CanvasJSReact = require('./canvasjs.react');
+
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+
 
 const exampleCode = `{type: 'start', timestamp: 0, select: ['min_response_time', 'max_response_time'], group: ['os', 'browser']}
 {type: 'span', timestamp: 0, begin: 0, end: 1}
@@ -21,14 +26,6 @@ const exampleCode = `{type: 'start', timestamp: 0, select: ['min_response_time',
 {type: 'data', timestamp: 0, os: 'mac', browser: 'firefox', min_response_time: 0.8, max_response_time: 1.1}
 {type: 'data', timestamp: 0, os: 'linux', browser: 'firefox', min_response_time: 0.9, max_response_time: 1.4}
 {type: 'stop', timestamp: 1}`
-
-const styles = {
-  root: {
-    boxSizing: 'border-box',
-    fontFamily: '"Source Sans Pro", "Source Code Pro", monospace',
-    ...theme.plain
-  }
-}
 
 class EditorExample extends Component {
   state = { 
@@ -48,35 +45,19 @@ class EditorExample extends Component {
     ]
   }
 
-  onValueChange = code => {
-    this.setState({ code })
+  // This load the code exemple (initial load)
+  componentDidMount() {
+    this.readInput(this.state.code);
   }
 
-  highlight = code => (
-    <Highlight {...defaultProps} theme={theme} code={code} language="javascript">
-      {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <Fragment>
-          {tokens.map((line, i) => (
-            <Line key={i} {...getLineProps({ line, key: i })}>
-              <LineNo>{i + 1}</LineNo>
-              <LineContent>
-                <div>
-                  {line.map((token, key) => <span {...getTokenProps({ token, key })} />)}
-                </div>             
-              </LineContent>
-            </Line>
-          ))}
-        </Fragment>
-      )}
-    </Highlight>
-  )
-
-
+  // This convert the text line comeing to the read input
   convertToJson = (text) => {
 	  let lines = text.split('\n').filter(e => e.trim());
 	  return lines.map((e) => JSON.parse(JSON.stringify(eval("(" + e + ")"))));
   }
 
+  // This read the text presents in code editor, convert it in a JSON format, check the
+  // code structure, line by line, and calls the chart ploter
   readInput = async (code) => {
     const lines = this.convertToJson(code);
 
@@ -94,6 +75,8 @@ class EditorExample extends Component {
     await this.setChart();
   }
 
+  // This check the data structure considering data type in each line
+  //checked returning a boolean value according the conditions
   checkStructure = async (line, index, length) => {
     const {type} = line;
     if (index === 0 && type === 'start') {
@@ -117,10 +100,12 @@ class EditorExample extends Component {
     else { return false; }
   }
 
+  // This build chart according the data structure
   setChart = async () => {
+    const {data} = this.state;
     let chartData = [];
 
-    this.state.data.map(data => {
+    data.map(data => {
 
       //this.state.select.map(select => {
         let cd = {
@@ -151,37 +136,34 @@ class EditorExample extends Component {
     await this.setState({chartOptions});
   }
 
-
   render() {
     const options = this.state.chartOptions;
 
     return (
       <div>
-        <Wrapper>
-          <Header>
-            <h1>Felipe's Challenge</h1>
-          </Header>
-        
-          <Code>
-            <Editor
-              value={this.state.code}
-              onValueChange={this.onValueChange}
-              highlight={this.highlight}
-              padding={10}
-              style={styles.root}
-            />
-          </Code>
+        <Header>
+          <h1>Felipe's Challenge</h1>
+        </Header>
 
-          <Chart>
-            <CanvasJSChart options = {options} />
-          </Chart>
+        <SplitPane split="horizontal" size={400}>
+          <AceEditor mode="javascript"
+                     theme="monokai"
+                     width="100%"
+                     height="100%"
+                     showGutter={true}
+                     fontSize={16}
+                     value={this.state.code}
+                     onChange={(value) => this.setState({code: value})}
+          />
 
-          <Footer>
-            <button onClick={() => this.readInput(this.state.code)}>
-              Generate Chart
-            </button>
-          </Footer>
-        </Wrapper>
+          <CanvasJSChart options={options} />
+        </SplitPane>
+
+        <Footer>
+          <button onClick={() => this.readInput(this.state.code)}>
+            Generate Chart
+          </button>
+        </Footer>
       </div>
     )
   }
