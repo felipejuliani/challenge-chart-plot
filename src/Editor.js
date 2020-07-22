@@ -1,5 +1,5 @@
 import React, {  Component } from 'react'
-import {Footer, Header } from "./styles";
+import {Footer, Header, Container, ChartContainer, Chart, Button } from "./styles";
 
 import AceEditor from 'react-ace';
 
@@ -14,6 +14,7 @@ import CanvasJSReact from './assets/canvasjs.react';
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
+const MAX_LINES = 12;
 
 const exampleCode = `{type: 'start', timestamp: 0, select: ['min_response_time', 'max_response_time'], group: ['os', 'browser']}
 {type: 'span', timestamp: 0, begin: 0, end: 1}
@@ -65,7 +66,13 @@ class EditorExample extends Component {
     
     let ok = true;
     for (let i = 0; i < lines.length; i++){
+      if (i > MAX_LINES) { 
+        alert("The maximum number of lines has been exceeded. Please, please try again with fewer data lines.");
+        return
+      }
+      
       if (!this.checkStructure(lines[i], i, lines.length)) {
+        alert("The structure is wrong. Please, check the pattern.");
         return
       }
     }
@@ -100,26 +107,29 @@ class EditorExample extends Component {
     else { return false; }
   }
 
-  // This build chart according the data structure
+  // This build chart according the data structure...
+  // But I did'nt understand ridht the labels about minimum
+  // and maximum response times for key pair os and browser.
+  // Example: linux and mac have two lines, but both have
+  // minimum and maximum response times. So what's the real
+  // minimum and maximum response times to be considered?
+  // For this reason I have had implemented labels without
+  // minimum and maximuns response times.
   setChart = async () => {
     const {data} = this.state;
     let chartData = [];
 
     data.map(data => {
-
-      //this.state.select.map(select => {
-        let cd = {
-          type: "spline",
-          name: data.os + "_" + data.browser,// + "_" + select,
-          showInLegend: true,
-          dataPoints: [
-            { y: data.min_response_time, label: this.state.begin.toString() },
-            { y: data.max_response_time, label: this.state.end.toString() },
-          ]
-        }
-        chartData.push(cd);
-      //});
-
+      let cd = {
+        type: "spline",
+        name: data.os + "_" + data.browser,
+        showInLegend: true,
+        dataPoints: [
+          { y: data.min_response_time, label: this.state.begin.toString() },
+          { y: data.max_response_time, label: this.state.end.toString() },
+        ]
+      }
+      chartData.push(cd);
     });
 
     console.log(chartData);
@@ -140,12 +150,16 @@ class EditorExample extends Component {
     const options = this.state.chartOptions;
 
     return (
-      <div>
+      <Container>
         <Header>
           <h1>Felipe's Challenge</h1>
         </Header>
 
-        <SplitPane split="horizontal" size={400}>
+        <SplitPane split="horizontal"
+                   minSize={220}
+                   style={{position: 'relative'}}
+                   pane1Style={{}}
+                   pane2Style={{backgroundColor: '#fff'}}>
           <AceEditor mode="javascript"
                      theme="monokai"
                      width="100%"
@@ -156,15 +170,25 @@ class EditorExample extends Component {
                      onChange={(value) => this.setState({code: value})}
           />
 
-          <CanvasJSChart options={options} />
+          <ChartContainer>
+            <div></div>
+            <Chart>
+              <div></div>
+              <CanvasJSChart options={options} 
+                             onRef={ref => this.chart = ref}
+			        />
+              <div></div>
+            </Chart>
+            <div></div>
+          </ChartContainer>
         </SplitPane>
 
         <Footer>
-          <button onClick={() => this.readInput(this.state.code)}>
+          <Button onClick={() => this.readInput(this.state.code)}>
             Generate Chart
-          </button>
+          </Button>
         </Footer>
-      </div>
+      </Container>
     )
   }
 }

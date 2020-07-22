@@ -34,34 +34,63 @@ export const LineContent = styled.span`
 `;
 
 export const Header = styled.div`
-  position: fixed;
+  font-family: sans-serif;
   text-align: left;
-  width: "100%";
-  padding: 2em;
+  padding: 8px 8px 8px 24px;
+  background-color: #888;
 `;
 
 export const Footer = styled.div`
   text-align: left;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  width: "100%"
-  padding: 2em;
-`;
-
-export const Code = styled.div`
-  text-align: left;
-  font-family: "Source Sans Pro", "Source Code Pro", monospace;
-  font-size: 18;
-  width: "100%"  
-  height: "50%"
-  padding: 2em;
+  padding: 12px;
+  background-color: #888;
 `;
 
 export const Chart = styled.div`
-  width: "100%";
-  height: "50%";
-  background: #666;
-  padding: 2em;
+  text-align: center;
+  background-color: #fff;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 50px 1fr 50px;
+`;
+
+export const Container = styled.div`
+  text-align: center;
+  background-color: #fff;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 50px 1fr 50px;
+`;
+
+export const ChartContainer = styled.div`
+  text-align: center;
+  background-color: #fff;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 50px 1fr 50px;
+`;
+
+export const Button = styled.div`
+  text-align: center;
+  background-color: #3399ff;
+  font-family: sans-serif;
+  width: 140px;
+  height: 22px;
+  color: #fff;
+  font-size: 16;
+  display: table-cell;
+  padding-top: 4px;
+  border: 2px solid #3399ee;
+  border-radius: 10px;
+  &:hover {
+    border: 2px solid #33adff;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  &:click {
+    color: #b3e0ff;
+  }
 `;
