@@ -1,3 +1,8 @@
+# Brief explanation
+
+Please, comments and explanations are in the code ./src/components/Editor.js. I used just one component aiming to facilitate the review, trying to wirte a simple solution application as possible. Tests wasn't develop, because I need to learn better how implement them in React.
+
+
 # Plotting a chart
 
 In this challenge, you will implement a web application that plots a line chart based on some manually input data.

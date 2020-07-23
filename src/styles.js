@@ -1,52 +1,19 @@
-import styled from "styled-components";
+import Styled from "styled-components";
 
-export const Wrapper = styled.div`
-  font-family: sans-serif;
-  text-align: center;
-`;
-
-export const Pre = styled.pre`
-  text-align: left;
-  margin: 1em 0;
-  padding: 0.5em;
-  overflow: scroll;
-
-  & .token-line {
-    line-height: 1.3em;
-    height: 1.3em;
-  }
-`;
-
-export const Line = styled.div`
-  display: table-row;
-`;
-
-export const LineNo = styled.span`
-  display: table-cell;
-  text-align: right;
-  padding-right: 1em;
-  user-select: none;
-  opacity: 0.4;
-`;
-
-export const LineContent = styled.span`
-  display: table-cell;
-`;
-
-export const Header = styled.div`
+export const Header = Styled.div`
   font-family: sans-serif;
   text-align: left;
   padding: 8px 8px 8px 24px;
   background-color: #888;
 `;
 
-export const Footer = styled.div`
+export const Footer = Styled.div`
   text-align: left;
   padding: 12px;
   background-color: #888;
 `;
 
-export const Chart = styled.div`
+export const Chart = Styled.div`
   text-align: center;
   background-color: #fff;
   width: 100%;
@@ -55,7 +22,7 @@ export const Chart = styled.div`
   grid-template-columns: 50px 1fr 50px;
 `;
 
-export const Container = styled.div`
+export const Container = Styled.div`
   text-align: center;
   background-color: #fff;
   width: 100vw;
@@ -64,16 +31,16 @@ export const Container = styled.div`
   grid-template-rows: 50px 1fr 50px;
 `;
 
-export const ChartContainer = styled.div`
+export const ChartContainer = Styled.div`
   text-align: center;
   background-color: #fff;
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-rows: 50px 1fr 50px;
+  grid-template-rows: 20px 1fr 20px;
 `;
 
-export const Button = styled.div`
+export const Button = Styled.div`
   text-align: center;
   background-color: #3399ff;
   font-family: sans-serif;
@@ -84,10 +51,9 @@ export const Button = styled.div`
   display: table-cell;
   padding-top: 4px;
   border: 2px solid #3399ee;
-  border-radius: 10px;
+  border-radius: 4px;
   &:hover {
-    border: 2px solid #33adff;
-    border-radius: 10px;
+    border: 2px solid #33adcc;
     cursor: pointer;
   }
   &:click {
